@@ -1,6 +1,6 @@
 package finalproject;
 
-public abstract class ListNode {
+public class ListNode {
 	String data;
 	ListNode nxt;
 	ListNode prev;
@@ -9,5 +9,11 @@ public abstract class ListNode {
 		this.data = data;
 		this.nxt = nxt;
 		this.prev = prev;
+	}
+
+	public ListNode() {
+		this.data = null;
+		this.nxt = null;
+		this.prev = null;
 	}
 }

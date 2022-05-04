@@ -1,6 +1,6 @@
 package finalproject;
 
-public class Messages extends ListNode<String> {
+public class Messages extends ListNode {
 
     protected ListNode head;
     protected int size;
@@ -8,7 +8,7 @@ public class Messages extends ListNode<String> {
 
 
     public Messages () {
-        head = new ListNode<String><null, null, null>;
+        head = new ListNode(null, null, null);
         size = 0;
     }
 
