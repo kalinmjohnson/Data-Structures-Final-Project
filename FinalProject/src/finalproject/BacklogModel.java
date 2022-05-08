@@ -7,7 +7,7 @@ import java.util.EmptyStackException;
  * @author Nicholas
  * @version May 8, 2022
  */
-public class BacklogModel  {
+public class BacklogModel extends ListNode {
 
 	/** The first node in the list */
 	ListNode head;
