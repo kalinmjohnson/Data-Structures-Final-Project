@@ -3,6 +3,8 @@ package finalproject;
 public class Game {
     int highScore;
     int size;
+    Direction direction;
+    
 
     public void setHighScore(int hScore) {
         highScore = hScore;
@@ -20,8 +22,9 @@ public class Game {
         return size;
     }
 
-    Game (int hScore, int s) {
+    Game (int hScore, int s, Direction d) {
         highScore = hScore;
         size = s;
+        direction = d;
     }
 }
