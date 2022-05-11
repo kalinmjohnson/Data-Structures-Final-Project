@@ -1,5 +1,12 @@
 package finalproject;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -15,28 +22,23 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Duration;
 
 public class GUI extends Application {
+	File obj = new File("filename.txt");
+	private Messages myMessages = new Messages();
+
 
 	// Set up Attributes for GUI
 
@@ -55,14 +57,9 @@ public class GUI extends Application {
 	private Button stopGame;
 	private GUI Gui;
 	private Stage PStage;
-	
-	protected Game snakeGame = new Game(0, 0, Direction.RIGHT);
 
-	
-	
-	
-	
-	
+	protected Game snakeGame = new Game(0, 1, Direction.RIGHT);
+
 	public Parent createContent() {
 
 		this.Gui = gui;
@@ -169,6 +166,7 @@ public class GUI extends Application {
 				newNode.setTranslateY(tailY);
 
 				snake.add(newNode);
+				snakeGame.size++;
 			}
 
 		});
@@ -222,12 +220,8 @@ public class GUI extends Application {
 		if (snakeGame.direction != Direction.LEFT)
 			snakeGame.direction = Direction.RIGHT;
 	}
+	
 
-	/*
-	 * public class addPriorityTaskPanel(GUI gui) { this.gui = gui; }
-	 * 
-	 * public class addStackOfTaskPanel(GUI gui) { this.gui = gui; }
-	 */
 
 	// Main running functions
 
@@ -239,34 +233,6 @@ public class GUI extends Application {
 			BorderPane root = new BorderPane();
 			Scene scene = new Scene(root, 800, 800);
 			primaryStage.setScene(scene);
-
-			ColumnConstraints col1 = new ColumnConstraints();
-			col1.setPercentWidth(25);
-			ColumnConstraints col2 = new ColumnConstraints();
-			col2.setPercentWidth(25);
-			ColumnConstraints col3 = new ColumnConstraints();
-			col3.setPercentWidth(25);
-			ColumnConstraints col4 = new ColumnConstraints();
-			col4.setPercentWidth(25);
-
-			//root.getColumnConstraints().addAll(col1, col2, col3, col4);
-
-			RowConstraints row1 = new RowConstraints();
-			row1.setPercentHeight(25);
-			RowConstraints row2 = new RowConstraints();
-			row2.setPercentHeight(25);
-			RowConstraints row3 = new RowConstraints();
-			row3.setPercentHeight(25);
-			RowConstraints row4 = new RowConstraints();
-			row4.setPercentHeight(25);
-
-			//root.getRowConstraints().addAll(row1, row2, row3, row4);
-
-			root.setMinSize(10, 10);
-			root.setPadding(new Insets(10, 10, 10, 10));
-			//root.setVgap(5);
-			//root.setHgap(5);
-
 			primaryStage.setTitle("Our Command Center");
 
 			// Messages Stuff
@@ -274,36 +240,55 @@ public class GUI extends Application {
 			BorderPane addMPane = new BorderPane();
 			root.setTop(addMPane);
 			BorderPane.setAlignment(addMPane, Pos.TOP_CENTER);
-			//root.add(addMPane, 0, 0);
-			/*GridPane.setColumnIndex(addMPane, 0);
-			GridPane.setColumnSpan(addMPane, 4);
-			GridPane.setRowIndex(addMPane, 0);
-			GridPane.setRowSpan(addMPane, 1);*/
-			// addMPane.setPrefSize(1000, 200);
+
+			addMPane.setMinSize(100, 50);
+			addMPane.setPadding(new Insets(10, 10, 10, 10));
+			
+			addMessagesPanel aMessagePanel = new addMessagesPanel(this, addMPane, myMessages);
+
+
+			// Priority Task Stuff and Stack of Tasks BorderPane
+
+			BorderPane addPTSTPane = new BorderPane();
+			root.setLeft(addPTSTPane);
+			BorderPane.setAlignment(addPTSTPane, Pos.BOTTOM_CENTER);
+
+			// Priority Task Stuff
+
+			BorderPane addPTPane = new BorderPane();
+			addPTSTPane.setTop(addPTPane);
+			BorderPane.setAlignment(addPTPane, Pos.TOP_CENTER);
 
 			addMPane.setMinSize(100, 50);
 			addMPane.setPadding(new Insets(10, 10, 10, 10));
 
-			addMessagesPanel aMessagePanel = new addMessagesPanel(this, addMPane);
+			addPriorityTaskPanel aPTPanel = new addPriorityTaskPanel(this, addPTPane);
+
+			// Priority Task Stuff
+
+			BorderPane addSTPane = new BorderPane();
+			addPTSTPane.setCenter(addSTPane);
+			BorderPane.setAlignment(addSTPane, Pos.BOTTOM_CENTER);
+
+			addSTPane.setMinSize(100, 50);
+			addSTPane.setPadding(new Insets(30, 10, 10, 10));
+
+			addStackOfTasksPanel aSTPanel = new addStackOfTasksPanel(this, addSTPane);
 
 			// Game Stuff on primary stage
 
 			BorderPane addGame = new BorderPane();
 			root.setRight(addGame);
-			addGame.setPrefSize(400,  400);
+			addGame.setPrefSize(400, 400);
 			BorderPane.setAlignment(addGame, Pos.TOP_CENTER);
-			//root.add(addGame, 2, 2);
-			//addGame.setPrefSize(1000, 200);
 
 			addGame.setMinSize(100, 50);
 			addGame.setPadding(new Insets(10, 10, 10, 10));
-			/*GridPane.setColumnIndex(addMPane, 2);
-			GridPane.setColumnSpan(addMPane, 2);
-			GridPane.setRowIndex(addMPane, 2);
-			GridPane.setRowSpan(addMPane, 2);*/
 
 			GameController aGameController = new GameController(this, addGame, snakeGame);
-			
+
+			// Game Stuff on SceneGame
+
 			Scene sceneGame;
 			sceneGame = new Scene(createContent());
 			sceneGame.setOnKeyPressed(e -> {
@@ -335,7 +320,6 @@ public class GUI extends Application {
 			});
 
 			startGame = new Button("START");
-			//startGame.setOnAction(e -> primaryStage.setScene(sceneGame));
 			startGame.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
@@ -343,18 +327,19 @@ public class GUI extends Application {
 					startGame();
 				}
 			});
-			
+
 			root.setBottom(startGame);
 			BorderPane.setAlignment(startGame, Pos.BOTTOM_CENTER);
 
 			primaryStage.setScene(scene);
-
 			primaryStage.show();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	public static void main(String[] args) {
 		launch(args);
