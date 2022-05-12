@@ -66,18 +66,20 @@ public class addPriorityTaskPanel {
 		root.setPadding(new Insets(10, 10, 10, 10));
 		display.setPadding(new Insets(10, 0, 10, 0));
 		BorderPane.setMargin(inputPriority, new Insets(0, 30, 0, 30));
-	}	
-   
-	public void addTask(String data, int pri) {
+	}
+
+	public void addTask(String data, int pri) throws IllegalArgumentException{
+		if ( pri < 0) { throw new IllegalArgumentException("Priority can't be negative."); }
+		if ( pri < 48 || pri > 57) { throw new IllegalArgumentException("Priority can't be anything except an int."); }
 		PriorityTask newTask = new PriorityTask( data, pri);
 		priorityTasks.add(newTask);
 		displayTask();
 	}
-
-    public void deleteTask() {
+	
+	public void deleteTask() {
 		priorityTasks.poll(); // deletes the top task we could keep track of how many tasks were done
 		displayTask();
-    }
+	}
 	
     public void displayTask() {
     	String newTaskText = priorityTasks.isEmpty()?
