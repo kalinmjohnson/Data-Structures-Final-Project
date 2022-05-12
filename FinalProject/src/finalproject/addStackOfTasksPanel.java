@@ -78,19 +78,19 @@ public class addStackOfTasksPanel {
 	   	clearST();
 	}
 
-    public void deleteTask() {
-    	backLogTasks.pop();
-    	displayIt();
-    }
+	public void deleteTask() {
+    		backLogTasks.pop();
+	    	displayIt();
+	}
 	
-    public void displayIt() {
-    	for (int i = 0; i < tasks.length; i++) {
-    		String setIt = i < backLogTasks.size? backLogTasks.peek(i): "";
-    		tasks[i].setText(setIt);
+	public void displayIt() {
+    		for (int i = 0; i < tasks.length; i++) {
+    			String setIt = i < backLogTasks.size? backLogTasks.peek(i): "";
+    			tasks[i].setText(setIt);
+    		}
     	}
-    }
     
-    public void clearST() {
-    	enterTaskTF.setText("");
-    }
+    	public void clearST() {
+    		enterTaskTF.setText("");
+	}
 }
