@@ -1,5 +1,7 @@
 package finalproject;
 
+import java.util.Iterator;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -13,6 +15,9 @@ import javafx.scene.layout.GridPane;
 
 public class addStackOfTasksPanel {
 	private TextField enterTaskTF;
+	
+	private Label[] tasks = new Label[8];
+	/*
 	private Label task1;
 	private Label task2;
 	private Label task3;
@@ -20,10 +25,13 @@ public class addStackOfTasksPanel {
 	private Label task5;
 	private Label task6;
 	private Label task7;
-	private Label task8;
+	private Label task8;*/
 	private Button addSTaskB;
 	private Button deleteSTaskB;
 	private Label title;
+	
+	// Create a new Stack of tasks to hold all of the back log tasks.
+	private BacklogModel backLogTasks = new BacklogModel();
 	
 	public addStackOfTasksPanel (GUI gui, BorderPane root) {
 		
@@ -31,6 +39,11 @@ public class addStackOfTasksPanel {
 		title = new Label("Backlog of Tasks\n ");
 		title.setStyle("-fx-font: 16 arial;");
 		
+		for ( Label task : tasks) {
+			task = new Label();
+			task.setStyle("-fx-font: 16 arial;");
+		}
+		/*
 		task1 = new Label();
 		task2 = new Label();
 		task3 = new Label();
@@ -47,12 +60,12 @@ public class addStackOfTasksPanel {
 		task6.setStyle("-fx-font: 16 arial;");
 		task7.setStyle("-fx-font: 16 arial;");
 		task8.setStyle("-fx-font: 16 arial;");
-		
+		*/
 		addSTaskB = new Button("+");
 		addSTaskB.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
+				addTask(enterTaskTF.getText());
 			}
 		});
 		
@@ -60,7 +73,7 @@ public class addStackOfTasksPanel {
 		deleteSTaskB.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
+				deleteTask();
 			}
 		});
 		
@@ -74,6 +87,11 @@ public class addStackOfTasksPanel {
 		addTasks.setCenter(enterTaskTF);
 		addTasks.setRight(addSTaskB);
 		addTasks.setTop(title);
+		
+		for ( int i = 0; i < tasks.length; i++) {
+			listTasks.add( tasks[i], i, 0);
+		}
+		/*
 		listTasks.add(task1, 0, 0);
 		listTasks.add(task2, 1, 0);
 		listTasks.add(task3, 2, 0);
@@ -81,7 +99,7 @@ public class addStackOfTasksPanel {
 		listTasks.add(task5, 4, 0);
 		listTasks.add(task6, 5, 0);
 		listTasks.add(task7, 6, 0);
-		listTasks.add(task8, 7, 0);
+		listTasks.add(task8, 7, 0);*/
 		
 		BorderPane.setAlignment(deleteSTaskB, Pos.TOP_RIGHT);
 		BorderPane.setAlignment(enterTaskTF, Pos.TOP_LEFT);
@@ -89,14 +107,21 @@ public class addStackOfTasksPanel {
 		listTasks.setPadding(new Insets(10, 10, 10, 10));
 		addTasks.setPadding(new Insets(10, 0, 10, 0));
 		BorderPane.setMargin(enterTaskTF, new Insets(0, 10, 0, 0));
-		
-		public void addTask(String data) {
-	    	
-	    }
-
-	    public void deleteTask() {
-	    	
-	    }
-		
 	}
+	public void addTask(String data) {
+	   	backLogTasks.push(data);
+	   	displayIt();
+	}
+
+    public void deleteTask() {
+    	backLogTasks.pop();
+    	displayIt();
+    }
+	
+    public void displayIt() {
+    	for (int i = 0; i < tasks.length; i++) {
+    		String setIt = i < backLogTasks.size? backLogTasks.peek(i): "";
+    		tasks[i].setText(setIt);
+    	}
+    }
 }
