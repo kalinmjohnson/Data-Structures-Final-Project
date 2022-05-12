@@ -80,7 +80,10 @@ public class addPriorityTaskPanel {
     }
 	
     public void displayTask() {
-    	topTaskL.setText( "Top Priority: " + priorityTasks.peek().rdata + 
+    	String newTaskText = priorityTasks.isEmpty()?
+    		("Top Priority: " + "\n\nPriority Number:" + "\n"):
+    			("Top Priority: " + priorityTasks.peek().rdata + 
 				"\n\nPriority Number:" + priorityTasks.peek().priority + "\n");
+    	topTaskL.setText( newTaskText);
     }
 }
