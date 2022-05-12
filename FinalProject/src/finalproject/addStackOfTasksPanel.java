@@ -1,7 +1,5 @@
 package finalproject;
 
-import java.util.Iterator;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -17,6 +15,7 @@ public class addStackOfTasksPanel {
 	private TextField enterTaskTF;
 	
 	private Label[] tasks = new Label[8];
+	
 	/*
 	private Label task1;
 	private Label task2;
@@ -39,10 +38,11 @@ public class addStackOfTasksPanel {
 		title = new Label("Backlog of Tasks\n ");
 		title.setStyle("-fx-font: 16 arial;");
 		
-		for ( Label task : tasks) {
-			task = new Label();
-			task.setStyle("-fx-font: 16 arial;");
+		for ( int i = 0; i < tasks.length; i++) {
+			tasks[i] = new Label();
+			tasks[i].setStyle("-fx-font: 16 arial;");
 		}
+		
 		/*
 		task1 = new Label();
 		task2 = new Label();
