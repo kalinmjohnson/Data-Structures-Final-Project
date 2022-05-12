@@ -3,11 +3,11 @@ package finalproject;
 import java.util.EmptyStackException;
 
 /**
- * The Linked List Stack using for the Backlog of Tasks.
+ * The Linked List Stack used for the Backlog of Tasks.
  * @author Nicholas
  * @version May 8, 2022
  */
-public class BacklogModel extends ListNode {
+public class BacklogModel {
 
 	/** The first node in the list */
 	ListNode head;
@@ -45,6 +45,11 @@ public class BacklogModel extends ListNode {
 			size++;
 	}
 	
+	/**
+	 * This method pops the top string off.
+	 * @return thePopped
+	 * @throws EmptyStackException
+	 */
 	public String pop() throws EmptyStackException{
 		if (head.nxt == tail) {
 			throw new EmptyStackException();
@@ -57,11 +62,23 @@ public class BacklogModel extends ListNode {
 		return thePopped;
 	}
 	
-	public String top()throws EmptyStackException{
+	public String top() throws EmptyStackException{
 		if (head.nxt == tail) {
 			throw new EmptyStackException();
 		}
-		
 		return head.nxt.data;
+	}
+
+	/**
+	 * A special peek method that returns the value of the the ith string in the stack
+	 * @param i - the index of the desired string
+	 * @return current 
+	 */
+	public String peek(int i) {
+		ListNode current = head;
+		for ( int j = 0; j <= i; j++) {
+			current = current.nxt;
+		}
+		return current.data;
 	}
 }
