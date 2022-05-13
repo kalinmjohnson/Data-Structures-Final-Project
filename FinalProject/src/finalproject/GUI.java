@@ -39,14 +39,24 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
+/**
+ * Driver Class called GUI that constructs and runs the interface
+ * 
+ * @author Kalin Johnson
+ * @author Nicholas Pederson
+ * @version Spring 2022
+ * 
+ */
+
 public class GUI extends Application {
-	File obj = new File("filename.txt");
-	// private Messages myMessages = new Messages();
-
-	// Set up Attributes for GUI
-
-	// Main running functions
-
+	
+	/**
+	 * Start Function
+	 * @param primary Stage
+	 * @return doesn't return anything
+	 * 
+	 */
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void start(Stage primaryStage) {
@@ -87,15 +97,15 @@ public class GUI extends Application {
 
 			// Stack of Tasks or Backlog of Tasks Stuff
 
-			/*
-			 * BorderPane addSTPane = new BorderPane(); addPTSTPane.setCenter(addSTPane);
-			 * BorderPane.setAlignment(addSTPane, Pos.BOTTOM_CENTER);
-			 * 
-			 * addSTPane.setMinSize(100, 50); addSTPane.setPadding(new Insets(30, 10, 10,
-			 * 10));
-			 * 
-			 * addStackOfTasksPanel aSTPanel = new addStackOfTasksPanel(this, addSTPane);
-			 */
+			
+			  BorderPane addSTPane = new BorderPane(); addPTSTPane.setCenter(addSTPane);
+			  BorderPane.setAlignment(addSTPane, Pos.BOTTOM_CENTER);
+			  
+			  addSTPane.setMinSize(100, 50); addSTPane.setPadding(new Insets(30, 10, 10,
+			  10));
+			  
+			  addStackOfTasksPanel aSTPanel = new addStackOfTasksPanel(this, addSTPane);
+			 
 
 			// Game Stuff on primary stage
 
@@ -115,7 +125,10 @@ public class GUI extends Application {
 				@Override
 				public void handle(WindowEvent e) {
 					System.out.println("exiting...");
-					
+					aMessagePanel.writeM();
+					aGameController.writeG();
+					aSTPanel.writeB();
+					aPTPanel.writeP();
 				}
 			});
 
@@ -126,8 +139,16 @@ public class GUI extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Main Function
+	 * @param not a variable
+	 * @return doesn't return anything
+	 * 
+	 */
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 }
+
