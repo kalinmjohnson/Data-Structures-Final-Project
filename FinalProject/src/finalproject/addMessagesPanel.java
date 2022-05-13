@@ -1,41 +1,61 @@
 package finalproject;
 
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
+import javafx.util.Duration;
 
-public class addMessagesPanel {
+public class addMessagesPanel implements Runnable {
 	private TextField newMessage;
-	private Label displayMessage;
+	private Label displayMessageL;
 	private Button addMessage;
 	private Button deleteMessage;
-	// private Button stopRotation;
 	private GUI Gui;
-	private Messages myMessages = new Messages();
 
-	private ListNode key;
-	private boolean cont = true;
-	Timer t = new Timer();
+	private Messages myMessages = new Messages();
+	private ListNode key = myMessages.head;
 
 	public addMessagesPanel(GUI gui, BorderPane root) {
 		this.Gui = gui;
 
+		// Read in Messages if available
+
+		try {
+			// Creating an object of the file for reading the data
+			File myMess = new File("D:FileHandlingNewFilef1Mess.txt");
+			Scanner myReader = new Scanner(myMess);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				if (myMessages.size == 0) {
+					myMessages.head.data = data;
+					myMessages.head.prev = myMessages.head;
+					myMessages.head.nxt = myMessages.head;
+				} else {
+					addMessage(data, key);
+				}
+			}
+			myReader.close();
+		} catch (FileNotFoundException ex) {
+			//System.out.println("An error occurred.");
+			//ex.printStackTrace();
+		}
+
 		newMessage = new TextField();
-		displayMessage = new Label();
-		// displayMessage.setFont(Times New Roman);
+		newMessage.setStyle("-fx-font: 16 arial;");
+		displayMessageL = new Label(" ");
+		displayMessageL.setStyle("-fx-font: 16 arial;");
 		addMessage = new Button("+");
 		addMessage.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -54,17 +74,32 @@ public class addMessagesPanel {
 
 		BorderPane button = new BorderPane();
 
-		root.setLeft(displayMessage);
+		root.setLeft(displayMessageL);
 		root.setRight(newMessage);
 		root.setBottom(button);
 		button.setCenter(deleteMessage);
 		button.setRight(addMessage);
 		BorderPane.setAlignment(deleteMessage, Pos.BOTTOM_RIGHT);
 
+		Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(3), new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				displayMessage();
+			}
+		}));
+		fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+		fiveSecondsWonder.play();
+	}
+
+	public void run() {
+		displayMessage();
 	}
 
 	public void addMessage(String data, ListNode currentNode) {
-		cont = false;
+		if (data.equals(null) || data.equals("")) {
+			System.out.println("the input can't be empty or null");
+		}
 		if (myMessages.size == 0) {
 			// myMessages.head = new ListNode(data, myMessages.head, myMessages.head);
 			myMessages = new Messages(data);
@@ -72,45 +107,56 @@ public class addMessagesPanel {
 			ListNode newNode = new ListNode(data, null, null);
 			myMessages.addItem(newNode, currentNode);
 		}
-		myMessages.size++;
-		clearM();
-		displayMessage();
 	}
 
 	public void deleteMessage(ListNode currentNode) {
-		cont = false;
 		myMessages.deleteItem(currentNode);
-		myMessages.size--;
-		displayMessage();
 	}
 
 	public void displayMessage() {
-		key = myMessages.head;
-		cont = true;
-		int i = 0;
-
-		
-		Timer timer = new Timer("Timer");
-
-		timer.scheduleAtFixedRate(new TimerTask() {
-			@Override
-			public void run() {
-				if (key != key.nxt) {
-					key = key.nxt;
-					System.out.println(key.data);
-					displayMessage.setText(key.data);
-				}
-			}
-		}, 1000, 1000);
-
-		/*
-		 * key = key.nxt; System.out.println(key.data);
-		 * displayMessage.setText(key.data);
-		 */
-
+		if (myMessages.size > 1) {
+			key = key.nxt;
+			displayMessageL.setText(key.data);
+		} else {
+			key = myMessages.head;
+			displayMessageL.setText(key.data);
+		}
 	}
 
 	public void clearM() {
 		newMessage.setText("");
+	}
+
+	public void writeM() {
+		try {
+			// Creating an object of a file
+			File myMess = new File("D:FileHandlingNewFilef1Mess.txt");
+			if (myMess.createNewFile()) {
+				System.out.println("File created: " + myMess.getName());
+			} else {
+				System.out.println("File already exists.");
+			}
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+		try {
+
+			FileWriter myWriter = new FileWriter("D:FileHandlingNewFilef1Mess.txt");
+			// Writes this content into the specified file
+			if (myMessages.head.data != null) {
+				myWriter.write(myMessages.head.data + "\n");
+				key = myMessages.head.nxt;
+				int j = myMessages.size;
+				for (int i = 0; i <= j; i++) {
+					myWriter.write(key.data + "\n");
+				}
+			}
+			myWriter.close();
+			System.out.println("Successfully wrote to the file.");
+		} catch (IOException exp) {
+			System.out.println("An error occurred.");
+			exp.printStackTrace();
+		}
 	}
 }
