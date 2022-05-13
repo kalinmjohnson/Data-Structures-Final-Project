@@ -35,6 +35,13 @@ public class addMessagesPanel {
 
 	private Messages myMessages;
 
+	
+	/** A Contructor of Messages Panel and controller
+	 * 
+	 * 
+	 * @param gui
+	 * @param root
+	 */
 	public addMessagesPanel(GUI gui, BorderPane root) {
 		this.Gui = gui;
 		myMessages = new Messages();
@@ -104,6 +111,13 @@ public class addMessagesPanel {
 		fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
 		fiveSecondsWonder.play();
 	}
+	
+	/** Add a message to myMessages
+	 * 
+	 * @param data
+	 * @param currentNode
+	 * @return nothing
+	 */
 
 	public void addMessage(String data, ListNode currentNode) {
 		if (data.equals(null) || data.equals("")) {
@@ -131,12 +145,27 @@ public class addMessagesPanel {
 		System.out.println(myMessages.toString());
 
 	}
+	
+	/**
+	 * Delete a Message from myMessages
+	 * 
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void deleteMessage() {
 		System.out.println(myMessages.current.data);
 		myMessages.deleteItem();
 		System.out.println(myMessages.toString());
 	}
+	
+	/**
+	 * Display messages
+	 * run every 3 seconds
+	 * 
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void displayMessage() {
 
@@ -148,10 +177,24 @@ public class addMessagesPanel {
 
 		System.out.println(myMessages.size);
 	}
+	
+	/**
+	 * Clear text field
+	 * 
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void clearM() {
 		newMessage.setText("");
 	}
+	
+	/**
+	 * Write the data out to a file
+	 * 
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void writeM() {
 		try {
