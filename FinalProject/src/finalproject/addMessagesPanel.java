@@ -17,7 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 
-public class addMessagesPanel implements Runnable {
+public class addMessagesPanel {
 	private TextField newMessage;
 	private Label displayMessageL;
 	private Button addMessage;
@@ -46,6 +46,7 @@ public class addMessagesPanel implements Runnable {
 					addMessage(data, key);
 				}
 			}
+			key = myMessages.head;
 			myReader.close();
 		} catch (FileNotFoundException ex) {
 			//System.out.println("An error occurred.");
@@ -85,15 +86,12 @@ public class addMessagesPanel implements Runnable {
 
 			@Override
 			public void handle(ActionEvent event) {
+				System.out.println("Everytime it goes");
 				displayMessage();
 			}
 		}));
 		fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
 		fiveSecondsWonder.play();
-	}
-
-	public void run() {
-		displayMessage();
 	}
 
 	public void addMessage(String data, ListNode currentNode) {
@@ -114,13 +112,14 @@ public class addMessagesPanel implements Runnable {
 	}
 
 	public void displayMessage() {
-		if (myMessages.size > 1) {
+		if (myMessages.size >= 1) {
 			key = key.nxt;
 			displayMessageL.setText(key.data);
 		} else {
 			key = myMessages.head;
 			displayMessageL.setText(key.data);
 		}
+		System.out.println(key.data);
 	}
 
 	public void clearM() {
