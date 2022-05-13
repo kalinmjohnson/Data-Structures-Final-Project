@@ -19,7 +19,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -27,13 +26,20 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+/**
+* Game Controller
+* 
+* @author Kalin Johnson
+* @author Nicholas Pederson
+* @version Spring 2022
+* 
+*/
 
 public class GameController {
 
@@ -56,6 +62,15 @@ public class GameController {
 	private Stage PStage;
 	File myGame;
 
+	/**
+	 * Constructor for the Game Controller and Panel
+	 * @param gui
+	 * @param root
+	 * @param primaryStage
+	 * @param scene
+	 * @return nothing
+	 */
+	
 	public GameController(GUI gui, BorderPane root, Stage primaryStage, Scene scene) {
 		this.Gui = gui;
 
@@ -73,12 +88,11 @@ public class GameController {
 					// contains characters other than digits
 					System.out.println("Not a Number");
 				}
-				System.out.println(data);
 			}
 			myReader.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("An error occurred.");
-			e.printStackTrace();
+			//System.out.println("An error occurred.");
+			//e.printStackTrace();
 		} 
 
 		Title = new Label(
@@ -146,7 +160,11 @@ public class GameController {
 		BorderPane.setMargin(startGame, new Insets(10, 10, 10, 10));
 	}
 
-	
+	/**The method that makes the game happen
+	 * 
+	 * @return a parent
+	 * @param nothing
+	 */
 
 	public Parent createContent() {
 
@@ -240,11 +258,23 @@ public class GameController {
 		root.getChildren().addAll(food, snakeBody);
 		return root;
 	}
+	
+	/**
+	 * Restart the game
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void restartGame() {
 		stopGame();
 		startGame();
 	}
+	
+	/**
+	 * Start the game
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void startGame() {
 		snakeGame.direction = Direction.RIGHT;
@@ -253,6 +283,12 @@ public class GameController {
 		timeline.play();
 		isRunning = true;
 	}
+	
+	/**
+	 * Stop the game
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void stopGame() {
 		isRunning = false;
@@ -260,35 +296,69 @@ public class GameController {
 		if (snakeGame.size > snakeGame.highScore) {
 			snakeGame.highScore = snakeGame.size;
 		}
-		System.out.println(Integer.toString(snakeGame.size));
-		System.out.println(Integer.toString(snakeGame.highScore));
 		snakeGame.size = 0;
 		snake.clear();
 	}
+	
+	/**
+	 * Change Direction of snake
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void directionUP() {
 		if (snakeGame.direction != Direction.DOWN)
 			snakeGame.direction = Direction.UP;
 	}
+	
+	/**
+	 * Change Direction of snake
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void directionDOWN() {
 		if (snakeGame.direction != Direction.UP)
 			snakeGame.direction = Direction.DOWN;
 	}
+	
+	/**
+	 * Change Direction of snake
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void directionRIGHT() {
 		if (snakeGame.direction != Direction.RIGHT)
 			snakeGame.direction = Direction.LEFT;
 	}
 
+	/**
+	 * Change Direction of snake
+	 * @param nothing
+	 * @return nothing
+	 */
+	
 	public void directionLEFT() {
 		if (snakeGame.direction != Direction.LEFT)
 			snakeGame.direction = Direction.RIGHT;
 	}
+	
+	/**
+	 * Change highscore on GUI
+	 * @param nothing
+	 * @return nothing
+	 */
 
 	public void updateHighScore() {
 		HighScore.setText("HighScore: " + snakeGame.highScore);
 	}
+	
+	/**
+	 * File out highscore data to a file
+	 * @param nothing
+	 * @return nothing
+	 */
 	
 	public void writeG() {
 		try {
@@ -311,3 +381,4 @@ public class GameController {
 		}
 	}
 }
+
