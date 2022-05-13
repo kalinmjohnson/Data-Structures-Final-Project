@@ -39,6 +39,10 @@ public class Messages {
 	public void deleteItem() {
 		if (size == 0) {
 			System.out.println("there is nothing to delete");
+		} else if (size == 1) {
+			current.data = "";
+			current.prev = current;
+			current.nxt = current;
 		} else {
 			current.prev.nxt = current.nxt;
 			current.nxt.prev = current.prev;
@@ -59,13 +63,15 @@ public class Messages {
 
 	public String toString() {
 		ListNode printone;
-		String output;
-		printone = current;
-		output = printone.data;
-		printone = printone.nxt;
-		while (printone != current) {
-			output = output + " - " + printone.data;
+		String output = "";
+		if (size > 0) {
+			printone = current;
+			output = printone.data;
 			printone = printone.nxt;
+			while (printone != current) {
+				output = output + " - " + printone.data;
+				printone = printone.nxt;
+			}
 		}
 		return output;
 
@@ -98,4 +104,5 @@ public class Messages {
 	}
 
 }
+
 
