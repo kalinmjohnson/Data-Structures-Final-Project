@@ -1,7 +1,7 @@
 package finalproject;
 
 /**
- * Message controller
+ * ListNode Model
  * 
  * @author Kalin Johnson
  * @author Nicholas Pederson
