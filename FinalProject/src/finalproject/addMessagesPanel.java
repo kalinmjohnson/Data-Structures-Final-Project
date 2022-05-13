@@ -17,6 +17,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 
+/**
+ * Message controller
+ * 
+ * @author Kalin Johnson
+ * @author Nicholas Pederson
+ * @version Spring 2022
+ * 
+ */
+
 public class addMessagesPanel {
 	private TextField newMessage;
 	private Label displayMessageL;
@@ -24,11 +33,11 @@ public class addMessagesPanel {
 	private Button deleteMessage;
 	private GUI Gui;
 
-	private Messages myMessages = new Messages();
-	private ListNode key = myMessages.head;
+	private Messages myMessages;
 
 	public addMessagesPanel(GUI gui, BorderPane root) {
 		this.Gui = gui;
+		myMessages = new Messages();
 
 		// Read in Messages if available
 
@@ -39,18 +48,20 @@ public class addMessagesPanel {
 			while (myReader.hasNextLine()) {
 				String data = myReader.nextLine();
 				if (myMessages.size == 0) {
-					myMessages.head.data = data;
-					myMessages.head.prev = myMessages.head;
-					myMessages.head.nxt = myMessages.head;
+					myMessages.current.data = data;
+					myMessages.current.prev = myMessages.current;
+					myMessages.current.nxt = myMessages.current;
+					myMessages.size++;
 				} else {
-					addMessage(data, key);
+					addMessage(data, myMessages.current);
+					myMessages.current = myMessages.current.nxt;
 				}
 			}
-			key = myMessages.head;
 			myReader.close();
+			myMess.delete();
 		} catch (FileNotFoundException ex) {
-			//System.out.println("An error occurred.");
-			//ex.printStackTrace();
+			// System.out.println("An error occurred.");
+			// ex.printStackTrace();
 		}
 
 		newMessage = new TextField();
@@ -61,7 +72,7 @@ public class addMessagesPanel {
 		addMessage.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				addMessage(newMessage.getText(), key);
+				addMessage(newMessage.getText(), myMessages.current);
 				clearM();
 			}
 		});
@@ -69,7 +80,7 @@ public class addMessagesPanel {
 		deleteMessage.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				deleteMessage(key);
+				deleteMessage();
 			}
 		});
 
@@ -86,8 +97,8 @@ public class addMessagesPanel {
 
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println("Everytime it goes");
 				displayMessage();
+				System.out.println("Every 3 seconds");
 			}
 		}));
 		fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
@@ -99,27 +110,43 @@ public class addMessagesPanel {
 			System.out.println("the input can't be empty or null");
 		}
 		if (myMessages.size == 0) {
-			// myMessages.head = new ListNode(data, myMessages.head, myMessages.head);
-			myMessages = new Messages(data);
+			myMessages.current.data = data;
+			// myMessages.current.nxt = myMessages.current;
+			// myMessages.current.prev = myMessages.current;
+			System.out.println(myMessages.current.data);
+			System.out.println(myMessages.current.prev.data);
+			System.out.println(myMessages.current.nxt.data);
+		} else if (myMessages.size == 1) {
+			ListNode newNode = new ListNode(data, null, null);
+			newNode.prev = myMessages.current;
+			newNode.nxt = myMessages.current;
+			myMessages.current.nxt = newNode;
+			myMessages.current.prev = newNode;
 		} else {
 			ListNode newNode = new ListNode(data, null, null);
-			myMessages.addItem(newNode, currentNode);
+			myMessages.addItem(newNode);
+			System.out.println(newNode.data);
 		}
+		myMessages.size++;
+		System.out.println(myMessages.toString());
+
 	}
 
-	public void deleteMessage(ListNode currentNode) {
-		myMessages.deleteItem(currentNode);
+	public void deleteMessage() {
+		System.out.println(myMessages.current.data);
+		myMessages.deleteItem();
+		System.out.println(myMessages.toString());
 	}
 
 	public void displayMessage() {
-		if (myMessages.size >= 1) {
-			key = key.nxt;
-			displayMessageL.setText(key.data);
-		} else {
-			key = myMessages.head;
-			displayMessageL.setText(key.data);
+
+		myMessages.current = myMessages.current.nxt;
+		if (myMessages.size != 0) {
+			displayMessageL.setText(myMessages.current.data);
+			System.out.println(myMessages.current.data);
 		}
-		System.out.println(key.data);
+
+		System.out.println(myMessages.size);
 	}
 
 	public void clearM() {
@@ -143,16 +170,14 @@ public class addMessagesPanel {
 
 			FileWriter myWriter = new FileWriter("D:FileHandlingNewFilef1Mess.txt");
 			// Writes this content into the specified file
-			if (myMessages.head.data != null) {
-				myWriter.write(myMessages.head.data + "\n");
-				key = myMessages.head.nxt;
+			if (myMessages.current.data != null) {
 				int j = myMessages.size;
-				for (int i = 0; i <= j; i++) {
-					myWriter.write(key.data + "\n");
+				for (int i = 0; i < j; i++) {
+					myWriter.write(myMessages.current.data + "\n");
+					myMessages.current = myMessages.current.nxt;
 				}
 			}
 			myWriter.close();
-			System.out.println("Successfully wrote to the file.");
 		} catch (IOException exp) {
 			System.out.println("An error occurred.");
 			exp.printStackTrace();
