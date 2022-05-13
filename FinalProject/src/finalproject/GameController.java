@@ -1,5 +1,11 @@
 package finalproject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
@@ -30,7 +36,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class GameController {
-	
+
 	private Label HighScore;
 	private Label CurrentScore;
 	private Label Title;
@@ -45,32 +51,57 @@ public class GameController {
 	public static final int APP_H = 40 * BLOCK_SIZE;
 	protected boolean isMoved = false;
 	protected boolean isRunning = false;
+	protected Game snakeGame = new Game(0, 1, Direction.RIGHT);
 
 	private Stage PStage;
+	File myGame;
 
-	public GameController(GUI gui,  BorderPane root, Stage primaryStage, Scene scene) {
+	public GameController(GUI gui, BorderPane root, Stage primaryStage, Scene scene) {
 		this.Gui = gui;
-		
-		
-		Title = new Label("Play Snake! \nPress Start at the Bottom of the Screen!\nUse W-A-S-D to Control Your Snake\nPress Q to Quit and Exit the Game");
+
+		try {
+			// Creating an object of the file for reading the data
+			File myGame = new File("D:FileHandlingNewFilef1Game.txt");
+			Scanner myReader = new Scanner(myGame);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				try {
+					snakeGame.highScore = Integer.parseInt(data);
+				} catch (NumberFormatException e) {
+
+					// This is thrown when the String
+					// contains characters other than digits
+					System.out.println("Not a Number");
+				}
+				System.out.println(data);
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		} 
+
+		Title = new Label(
+				"Play Snake! \nPress Start at the Bottom of the Screen!\nUse W-A-S-D to Control Your Snake\nPress Q to Quit and Exit the Game");
 		root.setCenter(Title);
 		Title.setStyle("-fx-font: 16 arial;");
 		BorderPane.setAlignment(Title, Pos.BOTTOM_LEFT);
-		
+
 		HighScore = new Label("HighScore: " + snakeGame.highScore);
 		root.setTop(HighScore);
 		HighScore.setStyle("-fx-font: 16 arial;");
-		
-		// Image credit to https://w7.pngwing.com/pngs/866/136/png-transparent-snakes-and-ladders-game-android-animated-snake-s-text-video-game-grass.png
-		
+
+		// Image credit to
+		// https://w7.pngwing.com/pngs/866/136/png-transparent-snakes-and-ladders-game-android-animated-snake-s-text-video-game-grass.png
 
 		// BackGround Image
-		Image img = new Image("https://w7.pngwing.com/pngs/866/136/png-transparent-snakes-and-ladders-game-android-animated-snake-s-text-video-game-grass.png");
+		Image img = new Image(
+				"https://w7.pngwing.com/pngs/866/136/png-transparent-snakes-and-ladders-game-android-animated-snake-s-text-video-game-grass.png");
 		BackgroundImage bImag = new BackgroundImage(img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
 				BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
 		Background bGround = new Background(bImag);
 		root.setBackground(bGround);
-		
+
 		Scene sceneGame;
 		sceneGame = new Scene(createContent());
 		sceneGame.setOnKeyPressed(e -> {
@@ -95,7 +126,7 @@ public class GameController {
 			case Q:
 				stopGame();
 				primaryStage.setScene(scene);
-				updateHighScore(snakeGame);
+				updateHighScore();
 				break;
 			}
 
@@ -114,13 +145,8 @@ public class GameController {
 		BorderPane.setAlignment(startGame, Pos.BOTTOM_CENTER);
 		BorderPane.setMargin(startGame, new Insets(10, 10, 10, 10));
 	}
-	
-	public void updateHighScore(Game snakeGame) {
-		HighScore.setText("HighScore: " + snakeGame.highScore);
-	}
-	
 
-	protected Game snakeGame = new Game(0, 1, Direction.RIGHT);
+	
 
 	public Parent createContent() {
 
@@ -132,26 +158,6 @@ public class GameController {
 		Group snakeBody = new Group();
 		snake = snakeBody.getChildren();
 
-		startGame = new Button("START");
-		startGame.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				startGame();
-			}
-		});
-
-		stopGame = new Button("STOP");
-		stopGame.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				stopGame();
-			}
-		});
-
-		HighScore = new Label("HighScore: " + snakeGame.highScore);
-		HighScore.setTextFill(Color.color(1, 1, 1));
-		CurrentScore = new Label("Current Score: " + snakeGame.size);
-		CurrentScore.setTextFill(Color.color(1, 1, 1));
 
 		// BackGround Image
 		Image img = new Image("https://www.lawnstarter.com/blog/wp-content/uploads/2017/08/bermuda.jpg");
@@ -254,6 +260,8 @@ public class GameController {
 		if (snakeGame.size > snakeGame.highScore) {
 			snakeGame.highScore = snakeGame.size;
 		}
+		System.out.println(Integer.toString(snakeGame.size));
+		System.out.println(Integer.toString(snakeGame.highScore));
 		snakeGame.size = 0;
 		snake.clear();
 	}
@@ -276,5 +284,30 @@ public class GameController {
 	public void directionLEFT() {
 		if (snakeGame.direction != Direction.LEFT)
 			snakeGame.direction = Direction.RIGHT;
+	}
+
+	public void updateHighScore() {
+		HighScore.setText("HighScore: " + snakeGame.highScore);
+	}
+	
+	public void writeG() {
+		try {
+			// Creating an object of a file
+			File myGame = new File("D:FileHandlingNewFilef1Game.txt");
+			if (myGame.createNewFile()) {
+				System.out.println("File created: " + myGame.getName());
+			} else {
+				System.out.println("File already exists.");
+			}
+			FileWriter myWriter = new FileWriter("D:FileHandlingNewFilef1Game.txt");
+			// Writes this content into the specified file
+			myWriter.write(Integer.toString(snakeGame.highScore));
+
+			myWriter.close();
+			System.out.println("Successfully wrote to the file.");
+		} catch (IOException exp) {
+			System.out.println("An error occurred.");
+			exp.printStackTrace();
+		}
 	}
 }
