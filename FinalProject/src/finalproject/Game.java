@@ -1,7 +1,7 @@
 package finalproject;
 
 /**
-* ListNode Model
+* Game Model
 * 
 * @author Kalin Johnson
 * @author Nicholas Pederson
