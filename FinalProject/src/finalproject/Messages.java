@@ -1,36 +1,91 @@
 package finalproject;
 
-public class Messages extends ListNode {
+/**
+ * Model of Message part of the Gui
+ * 
+ * @author Kalin Johnson
+ * @author Nicholas Pederson
+ * @version Spring 2022
+ * 
+ */
 
-    protected ListNode head;
-    protected int size;
+public class Messages {
 
-    public void addItem(ListNode newNode, ListNode currentNode) {
-        newNode.prev = currentNode;
-        newNode.nxt = currentNode.nxt;
-        currentNode.nxt.prev = newNode;
-        currentNode.nxt = newNode;
-        size++;
+	protected ListNode current;
+	protected int size;
+
+	
+	/** Add a node to circular linked list
+	 * 
+	 * @param newNode to be added
+	 * @return nothing
+	 */
+	
+	public void addItem(ListNode newNode) {
+		newNode.prev = current;
+		newNode.nxt = current.nxt;
+		current.nxt = newNode;
+		current.nxt.prev = newNode;
+		
+	}
+	
+	/** Delete a node from circular linked list
+	 * 
+	 * @param nothing
+	 * @return nothing
+	 */
+
+	public void deleteItem() {
+    	current.prev.nxt = current.nxt;
+    	current.nxt.prev = current.prev;
+    	
+    	current = current.nxt;
+    	size--;
+    	System.out.println("del: " + this.toString());
     }
+	
+	/** Make a string from linked list data
+	 * 
+	 * @param nothing
+	 * @return a string of all data
+	 */
+	
+	public String toString() {
+		ListNode printone;
+		String output;
+		printone = current;
+		output = printone.data;
+		printone = printone.nxt;
+		while (printone != current) {
+			output = output + " - " + printone.data;
+			printone = printone.nxt;
+		}
+		return output;
+		
+	}
+	
+	/** Constructor with data given
+	 * 
+	 * @param nothing
+	 * @return nothing
+	 */
+	
+	public Messages(String data) {
+		current = new ListNode(data, current, current);
+		size = 1;
+	}
+	
+	/** Constructor with no data given
+	 * 
+	 * @param nothing
+	 * @return nothing
+	 */
 
-    public void deleteItem(ListNode currentNode) {
-    	if (currentNode == head) {
-    		head = currentNode.nxt;
-    	}
-    	currentNode.prev.nxt = currentNode.nxt;
-    	currentNode.nxt.prev = currentNode.prev;
-    }
-
-    public Messages (String data) {
-        head = new ListNode(data, null, null);
-        head.nxt = head;
-        head.prev = head;
-        size = 1;
-    }
-
-    public Messages () {
-        head = new ListNode(null, null, null);
-        size = 0;
-    }
+	public Messages() {
+		current = new ListNode(null, null, null);
+		current.nxt = current;
+		current.prev = current;
+		size = 0;
+	}
 
 }
