@@ -35,8 +35,8 @@ public class addMessagesPanel {
 
 	private Messages myMessages;
 
-	
-	/** A Contructor of Messages Panel and controller
+	/**
+	 * A Contructor of Messages Panel and controller
 	 * 
 	 * 
 	 * @param gui
@@ -107,14 +107,14 @@ public class addMessagesPanel {
 			@Override
 			public void handle(ActionEvent event) {
 				displayMessage();
-				System.out.println("Every 3 seconds");
 			}
 		}));
 		fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
 		fiveSecondsWonder.play();
 	}
-	
-	/** Add a message to myMessages
+
+	/**
+	 * Add a message to myMessages
 	 * 
 	 * @param data
 	 * @param currentNode
@@ -127,11 +127,6 @@ public class addMessagesPanel {
 		}
 		if (myMessages.size == 0) {
 			myMessages.current.data = data;
-			// myMessages.current.nxt = myMessages.current;
-			// myMessages.current.prev = myMessages.current;
-			System.out.println(myMessages.current.data);
-			System.out.println(myMessages.current.prev.data);
-			System.out.println(myMessages.current.nxt.data);
 		} else if (myMessages.size == 1) {
 			ListNode newNode = new ListNode(data, null, null);
 			newNode.prev = myMessages.current;
@@ -141,13 +136,10 @@ public class addMessagesPanel {
 		} else {
 			ListNode newNode = new ListNode(data, null, null);
 			myMessages.addItem(newNode);
-			System.out.println(newNode.data);
 		}
 		myMessages.size++;
-		System.out.println(myMessages.toString());
-
 	}
-	
+
 	/**
 	 * Delete a Message from myMessages
 	 * 
@@ -156,14 +148,11 @@ public class addMessagesPanel {
 	 */
 
 	public void deleteMessage() {
-		System.out.println(myMessages.current.data);
 		myMessages.deleteItem();
-		System.out.println(myMessages.toString());
 	}
-	
+
 	/**
-	 * Display messages
-	 * run every 3 seconds
+	 * Display messages run every 3 seconds
 	 * 
 	 * @param nothing
 	 * @return nothing
@@ -174,12 +163,9 @@ public class addMessagesPanel {
 		myMessages.current = myMessages.current.nxt;
 		if (myMessages.size != 0) {
 			displayMessageL.setText(myMessages.current.data);
-			System.out.println(myMessages.current.data);
 		}
-
-		System.out.println(myMessages.size);
 	}
-	
+
 	/**
 	 * Clear text field
 	 * 
@@ -190,7 +176,7 @@ public class addMessagesPanel {
 	public void clearM() {
 		newMessage.setText("");
 	}
-	
+
 	/**
 	 * Write the data out to a file
 	 * 
@@ -229,3 +215,4 @@ public class addMessagesPanel {
 		}
 	}
 }
+
