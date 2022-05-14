@@ -58,7 +58,9 @@ public class addMessagesPanel {
 					myMessages.current.data = data;
 					myMessages.current.prev = myMessages.current;
 					myMessages.current.nxt = myMessages.current;
-					myMessages.size++;
+					if (myMessages.current.data != null) {
+						myMessages.size++;
+					}
 				} else {
 					addMessage(data, myMessages.current);
 					myMessages.current = myMessages.current.nxt;
