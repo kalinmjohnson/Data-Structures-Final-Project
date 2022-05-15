@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 import javafx.event.ActionEvent;
@@ -17,115 +18,105 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
-public class addStackOfTasksPanel {
-	private TextField enterTaskTF;
-
-	private Label[] tasks = new Label[8];
-
-	private Button addSTaskB;
-	private Button deleteSTaskB;
-	private Label title;
-
-	// Create a new Stack of tasks to hold all of the back log tasks.
-	private BacklogModel backLogTasks = new BacklogModel();
-	private ListNode key;
-
-	public addStackOfTasksPanel(GUI gui, BorderPane root) {
-
-		enterTaskTF = new TextField();
-		title = new Label("Backlog of Tasks\n ");
-		title.setStyle("-fx-font: 16 arial;");
-
-		for (int i = 0; i < tasks.length; i++) {
-			tasks[i] = new Label();
-			tasks[i].setStyle("-fx-font: 16 arial;");
-		}
-
-		addSTaskB = new Button("+");
-		addSTaskB.setOnAction(new EventHandler<ActionEvent>() {
+public class addPriorityTaskPanel {
+	private TextField newTaskTF;
+	private TextField inputPriority;
+	private Label topTaskL;
+	
+	private Button addPTaskB;
+	private Button deleteTaskB;
+	
+	private GUI Gui;
+	// Create a new Min Heap of the priority Tasks (// model thingy)
+	private PriorityQueue<PriorityTask> priorityTasks = new PriorityQueue<PriorityTask>( 100);
+	
+	public addPriorityTaskPanel (GUI gui, BorderPane root) {
+		this.Gui = gui;	
+		
+		topTaskL = new Label("Top Priority: " + "\n\nPriority Number:" + "\n");
+		
+		newTaskTF = new TextField();
+		inputPriority = new TextField();
+		inputPriority.setPrefColumnCount(3);
+		
+		addPTaskB = new Button("+");
+		addPTaskB.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				addTask(enterTaskTF.getText());
+				addTask( newTaskTF.getText(), Integer.parseInt( inputPriority.getText()));
 			}
 		});
-
-		deleteSTaskB = new Button("-");
-		deleteSTaskB.setOnAction(new EventHandler<ActionEvent>() {
+		deleteTaskB = new Button("-");
+		deleteTaskB.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				deleteTask();
 			}
 		});
-
-		BorderPane addTasks = new BorderPane();
-		GridPane listTasks = new GridPane();
-
-		root.setTop(addTasks);
-		root.setCenter(listTasks);
-		root.setRight(deleteSTaskB);
-		addTasks.setCenter(enterTaskTF);
-		addTasks.setRight(addSTaskB);
-		addTasks.setTop(title);
-
-		for (int i = 0; i < tasks.length; i++) {
-			listTasks.add(tasks[i], 0, i);
-		}
-
-		BorderPane.setAlignment(deleteSTaskB, Pos.TOP_RIGHT);
-		BorderPane.setAlignment(enterTaskTF, Pos.TOP_LEFT);
-
-		listTasks.setPadding(new Insets(10, 10, 10, 10));
-		addTasks.setPadding(new Insets(10, 0, 10, 0));
-		BorderPane.setMargin(enterTaskTF, new Insets(0, 10, 0, 0));
-
+		
+		BorderPane display = new BorderPane();
+		
+		root.setTop(display);
+		display.setCenter(topTaskL);
+		display.setRight(deleteTaskB);
+		root.setLeft(newTaskTF);
+		root.setCenter(inputPriority);
+		root.setRight(addPTaskB);
+		
+		BorderPane.setAlignment(deleteTaskB, Pos.TOP_RIGHT);
+		BorderPane.setAlignment(topTaskL, Pos.TOP_LEFT);
+		
+		topTaskL.setStyle("-fx-font: 16 arial;");
+		
+		root.setPadding(new Insets(10, 10, 10, 10));
+		display.setPadding(new Insets(10, 0, 10, 0));
+		BorderPane.setMargin(inputPriority, new Insets(0, 30, 0, 30));
+		
 		try {
 			// Creating an object of the file for reading the data
-			File myBack = new File("D:FileHandlingNewFilef1B.txt");
-			Scanner myReader = new Scanner(myBack);
-			// key = backLogTasks.head.nxt;
+			File myPri = new File("D:FileHandlingNewFilef1Prior.txt");
+			Scanner myReader = new Scanner(myPri);
+			//key = backLogTasks.head.nxt;
 			while (myReader.hasNextLine()) {
 				String data = myReader.nextLine();
+				String number = myReader.nextLine();
+				int num = Integer.parseInt(number);
 				System.out.println(data);
-				addTask(data);
-				// System.out.println(data);
+				addTask(data, num);
+				//System.out.println(data);
 			}
 			myReader.close();
 		} catch (FileNotFoundException ex) {
-			// System.out.println("An error occurred.");
-			// ex.printStackTrace();
+			//System.out.println("An error occurred.");
+			//ex.printStackTrace();
 		}
 	}
 
-	public void addTask(String data) {
-		if (data == null || data.equals("")) {
-			System.out.println("Data can't be empty or null");
-		} else {
-			backLogTasks.push(data);
-			displayIt();
-			clearST();
-		}
+	public void addTask(String data, int pri) throws IllegalArgumentException{
+		if ( pri < 0) { throw new IllegalArgumentException("Priority can't be negative."); }
+		//if ( pri < 48 || pri > 57) { throw new IllegalArgumentException("Priority can't be anything except an int."); } //What happening here?
+		PriorityTask newTask = new PriorityTask( data, pri);
+		priorityTasks.add(newTask);
+		displayTask();
 	}
-
+	
 	public void deleteTask() {
-		backLogTasks.pop();
-		displayIt();
+		priorityTasks.poll(); // deletes the top task we could keep track of how many tasks were done
+		displayTask();
 	}
-
-	public void displayIt() {
-		for (int i = 0; i < tasks.length; i++) {
-			String setIt = i < backLogTasks.size ? backLogTasks.peek(i) : "";
-			tasks[i].setText(setIt);
-		}
-	}
-
-	public void clearST() {
-		enterTaskTF.setText("");
-	}
-
-	public void writeB() {
+	
+    public void displayTask() {
+    	String newTaskText = priorityTasks.isEmpty()?
+    		("Top Priority: " + "\n\nPriority Number:" + "\n"):
+    			("Top Priority: " + priorityTasks.peek().rdata + 
+				"\n\nPriority Number:" + priorityTasks.peek().priority + "\n");
+    	topTaskL.setText( newTaskText);
+    }
+    
+    public void writeP() {
 		try {
 			// Creating an object of a file
-			File myBack = new File("D:FileHandlingNewFilef1B.txt");
+			File myBack = new File("D:FileHandlingNewFilef1Back.txt");
 			if (myBack.createNewFile()) {
 				System.out.println("File created: " + myBack.getName());
 			} else {
@@ -137,23 +128,20 @@ public class addStackOfTasksPanel {
 		}
 		try {
 
-			FileWriter myWriter = new FileWriter("D:FileHandlingNewFilef1B.txt");
-			// Writes this content into the specified file
-			key = backLogTasks.tail;
-			if (backLogTasks.size != 0) {
-				key = key.prev;
-				while (key.prev != null) {
-
-					myWriter.write(key.data + "\n");
-					key = key.prev;
-				}
-
+			FileWriter myWriter = new FileWriter("D:FileHandlingNewFilef1Back.txt");
+			
+			while (priorityTasks.peek() != null) {
+				PriorityTask sender = priorityTasks.poll();
+				myWriter.write(sender.rdata + "\n" + sender.priority + "\n");
 			}
+			// Writes this content into the specified file
+				//myWriter.write();
+				
 			myWriter.close();
+			System.out.println("Successfully wrote to the file.");
 		} catch (IOException exp) {
 			System.out.println("An error occurred.");
 			exp.printStackTrace();
 		}
 	}
-
 }
