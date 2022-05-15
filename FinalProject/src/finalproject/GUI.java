@@ -19,14 +19,15 @@ import javafx.stage.WindowEvent;
  */
 
 public class GUI extends Application {
-	
+
 	/**
 	 * Start Function
+	 * 
 	 * @param primary Stage
 	 * @return doesn't return anything
 	 * 
 	 */
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void start(Stage primaryStage) {
@@ -67,15 +68,14 @@ public class GUI extends Application {
 
 			// Stack of Tasks or Backlog of Tasks Stuff
 
-			
-			  BorderPane addSTPane = new BorderPane(); addPTSTPane.setCenter(addSTPane);
-			  BorderPane.setAlignment(addSTPane, Pos.BOTTOM_CENTER);
-			  
-			  addSTPane.setMinSize(100, 50); addSTPane.setPadding(new Insets(30, 10, 10,
-			  10));
-			  
-			  addStackOfTasksPanel aSTPanel = new addStackOfTasksPanel(this, addSTPane);
-			 
+			BorderPane addSTPane = new BorderPane();
+			addPTSTPane.setCenter(addSTPane);
+			BorderPane.setAlignment(addSTPane, Pos.BOTTOM_CENTER);
+
+			addSTPane.setMinSize(100, 50);
+			addSTPane.setPadding(new Insets(30, 10, 10, 10));
+
+			addStackOfTasksPanel aSTPanel = new addStackOfTasksPanel(this, addSTPane);
 
 			// Game Stuff on primary stage
 
@@ -109,9 +109,10 @@ public class GUI extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Main Function
+	 * 
 	 * @param not a variable
 	 * @return doesn't return anything
 	 * 
@@ -121,4 +122,6 @@ public class GUI extends Application {
 		launch(args);
 	}
 }
+
+
 
