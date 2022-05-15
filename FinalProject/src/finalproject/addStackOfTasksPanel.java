@@ -142,12 +142,11 @@ public class addStackOfTasksPanel {
 			key = backLogTasks.tail;
 			if (backLogTasks.size != 0) {
 				key = key.prev;
-				while (key.prev != null) { 
-					
+				while (key.prev != null) {
 					myWriter.write(key.data + "\n");
 					key = key.prev;
 				}
-				
+
 			}
 			myWriter.close();
 		} catch (IOException exp) {
@@ -155,5 +154,5 @@ public class addStackOfTasksPanel {
 			exp.printStackTrace();
 		}
 	}
-	
+
 }
