@@ -197,6 +197,8 @@ public class addMessagesPanel {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
+		
+		
 		try {
 
 			FileWriter myWriter = new FileWriter("D:FileHandlingNewFilef1Mess.txt");
