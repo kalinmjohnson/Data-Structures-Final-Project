@@ -74,7 +74,7 @@ public class addPriorityTaskPanel {
 		
 		try {
 			// Creating an object of the file for reading the data
-			File myPri = new File("D:FileHandlingNewFilef1Prior.txt");
+			File myPri = new File("D:FileHandlingNewFilef1PT.txt");
 			Scanner myReader = new Scanner(myPri);
 			//key = backLogTasks.head.nxt;
 			while (myReader.hasNextLine()) {
@@ -97,6 +97,7 @@ public class addPriorityTaskPanel {
 		//if ( pri < 48 || pri > 57) { throw new IllegalArgumentException("Priority can't be anything except an int."); } //What happening here?
 		PriorityTask newTask = new PriorityTask( data, pri);
 		priorityTasks.add(newTask);
+		clear();
 		displayTask();
 	}
 	
@@ -113,12 +114,18 @@ public class addPriorityTaskPanel {
     	topTaskL.setText( newTaskText);
     }
     
+    public void clear() {
+    	newTaskTF.setText("");
+    	inputPriority.setText("");
+    	
+    }
+    
     public void writeP() {
 		try {
 			// Creating an object of a file
-			File myBack = new File("D:FileHandlingNewFilef1Back.txt");
-			if (myBack.createNewFile()) {
-				System.out.println("File created: " + myBack.getName());
+			File myPT = new File("D:FileHandlingNewFilef1PT.txt");
+			if (myPT.createNewFile()) {
+				System.out.println("File created: " + myPT.getName());
 			} else {
 				System.out.println("File already exists.");
 			}
@@ -128,7 +135,7 @@ public class addPriorityTaskPanel {
 		}
 		try {
 
-			FileWriter myWriter = new FileWriter("D:FileHandlingNewFilef1Back.txt");
+			FileWriter myWriter = new FileWriter("D:FileHandlingNewFilef1PT.txt");
 			
 			while (priorityTasks.peek() != null) {
 				PriorityTask sender = priorityTasks.poll();
