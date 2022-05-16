@@ -81,15 +81,20 @@ public class addMessagesPanel {
 		addMessage.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				addMessage(newMessage.getText(), myMessages.current);
-				clearM();
+				if (newMessage.getText() != "") {
+					addMessage(newMessage.getText(), myMessages.current);
+					clearM();
+				}
 			}
 		});
 		deleteMessage = new Button("-");
 		deleteMessage.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				deleteMessage();
+				if (myMessages.size > 0) {
+					deleteMessage();
+				}
+				System.out.println(myMessages.size);
 			}
 		});
 
@@ -163,6 +168,8 @@ public class addMessagesPanel {
 		myMessages.current = myMessages.current.nxt;
 		if (myMessages.size != 0) {
 			displayMessageL.setText(myMessages.current.data);
+		} else {
+			displayMessageL.setText("");
 		}
 	}
 
@@ -197,8 +204,7 @@ public class addMessagesPanel {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
-		
-		
+
 		try {
 
 			FileWriter myWriter = new FileWriter("D:FileHandlingNewFilef1Mess.txt");
