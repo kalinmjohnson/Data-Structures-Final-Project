@@ -5,6 +5,7 @@ import java.util.EmptyStackException;
 /**
  * The Linked List Stack used for the Backlog of Tasks.
  * @author Nicholas
+ * @author Kalin
  * @version May 8, 2022
  */
 public class BacklogModel {
@@ -26,18 +27,29 @@ public class BacklogModel {
 		clear();
 	}
 	
+	/**
+	 * Clear() method.
+	 */
 	public void clear() {
 		size = 0;
 		tail = new ListNode( null, null, head);
 		head = new ListNode( null, tail, null);
 	};	
 	
+	/**
+	 * 
+	 * @return if it is empty or not
+	 */
 	public boolean isEmpty() {
 		if (head.nxt == tail) {
 			return true;
 		} else { return false;}
 	}
 	
+	/**
+	 * Pushes another task on the stack
+	 * @param element - the new string task to put on the stack
+	 */
 	public void push(String element) {
 			ListNode topOfStack = new ListNode( element, head.nxt, head);
 			head.nxt.prev = topOfStack;
@@ -62,6 +74,11 @@ public class BacklogModel {
 		return thePopped;
 	}
 	
+	/**
+	 * A basic peek method
+	 * @return head.nxt.data - the top of the stack
+	 * @throws EmptyStackException
+	 */
 	public String top() throws EmptyStackException{
 		if (head.nxt == tail) {
 			throw new EmptyStackException();
