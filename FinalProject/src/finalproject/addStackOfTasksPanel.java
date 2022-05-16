@@ -1,5 +1,13 @@
 package finalproject;
 
+/**
+ * Stack of Tasks Controller.
+ * 
+ * @author Nicholas
+ * @author Kalin
+ * @version 5/16/2022
+ */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -30,6 +38,11 @@ public class addStackOfTasksPanel {
 	private BacklogModel backLogTasks = new BacklogModel();
 	private ListNode key;
 
+	/**
+	 * Constructer for the Stack of Tasks Panel
+	 * @param gui
+	 * @param root
+	 */
 	public addStackOfTasksPanel(GUI gui, BorderPane root) {
 
 		enterTaskTF = new TextField();
@@ -80,7 +93,7 @@ public class addStackOfTasksPanel {
 
 		try {
 			// Creating an object of the file for reading the data
-			File myBack = new File("D:FileHandlingNewFilef1B.txt");
+			File myBack = new File("FileHandlingNewFilef1B.txt");
 			Scanner myReader = new Scanner(myBack);
 			// key = backLogTasks.head.nxt;
 			while (myReader.hasNextLine()) {
@@ -96,6 +109,10 @@ public class addStackOfTasksPanel {
 		}
 	}
 
+	/**
+	 * Add task to the stack and display it.
+	 * @param data - the new task to add to the stack
+	 */
 	public void addTask(String data) {
 		if (data == null || data.equals("")) {
 			System.out.println("Data can't be empty or null");
@@ -105,12 +122,18 @@ public class addStackOfTasksPanel {
 			clearST();
 		}
 	}
-
+	
+	/**
+	 * Delete the top task.
+	 */
 	public void deleteTask() {
 		backLogTasks.pop();
 		displayIt();
 	}
 
+	/**
+	 * Display the 8 top tasks.
+	 */
 	public void displayIt() {
 		for (int i = 0; i < tasks.length; i++) {
 			String setIt = i < backLogTasks.size ? backLogTasks.peek(i) : "";
@@ -118,14 +141,20 @@ public class addStackOfTasksPanel {
 		}
 	}
 
+	/**
+	 * Clears the entering Text Field
+	 */
 	public void clearST() {
 		enterTaskTF.setText("");
 	}
 
+	/**
+	 * Write out the stuff to a file.
+	 */
 	public void writeB() {
 		try {
 			// Creating an object of a file
-			File myBack = new File("D:FileHandlingNewFilef1B.txt");
+			File myBack = new File("FileHandlingNewFilef1B.txt");
 			if (myBack.createNewFile()) {
 				System.out.println("File created: " + myBack.getName());
 			} else {
@@ -137,7 +166,7 @@ public class addStackOfTasksPanel {
 		}
 		try {
 
-			FileWriter myWriter = new FileWriter("D:FileHandlingNewFilef1B.txt");
+			FileWriter myWriter = new FileWriter("FileHandlingNewFilef1B.txt");
 			// Writes this content into the specified file
 			key = backLogTasks.tail;
 			if (backLogTasks.size != 0) {
