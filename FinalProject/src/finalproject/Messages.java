@@ -43,6 +43,7 @@ public class Messages {
 			current.data = "";
 			current.prev = current;
 			current.nxt = current;
+			size--;
 		} else {
 			current.prev.nxt = current.nxt;
 			current.nxt.prev = current.prev;
@@ -52,6 +53,7 @@ public class Messages {
 			size--;
 			System.out.println("del: " + this.toString());
 		}
+		
 	}
 
 	/**
@@ -104,5 +106,6 @@ public class Messages {
 	}
 
 }
+
 
 
